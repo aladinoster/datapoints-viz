@@ -1,0 +1,26 @@
+{
+    "name": "appreactfastapi-frontend",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "bun run vite",
+        "build": "bun run vite build",
+        "preview": "bun run vite preview"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "deck.gl": "^9.2.0",
+        "@deck.gl/core": "^9.2.0",
+        "@deck.gl/react": "^9.2.0",
+        "@deck.gl/layers": "^9.2.0",
+        "maplibre-gl": "^2.4.0"
+    },
+    "devDependencies": {
+        "vite": "^7.2.2",
+        "@vitejs/plugin-react": "^4.0.0",
+        "typescript": "^5.0.0",
+        "@types/react": "^18.0.0",
+        "@types/react-dom": "^18.0.0"
+    }
+}
