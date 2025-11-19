@@ -1,3 +1,4 @@
+import random
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,3 +30,16 @@ def get_points():
         {"lon": 2.3499, "lat": 48.8530},
         {"lon": 2.3333, "lat": 48.8600}
     ]
+
+@app.get('/api/random-arc-in-paris')
+def get_random_arc_in_paris():
+    # Bounding box for Paris
+    min_lon, max_lon = 2.2241, 2.4699
+    min_lat, max_lat = 48.8156, 48.9021
+    
+    points = []
+    for _ in range(10):
+        lon = random.uniform(min_lon, max_lon)
+        lat = random.uniform(min_lat, max_lat)
+        points.append({"lon": lon, "lat": lat})
+    return points

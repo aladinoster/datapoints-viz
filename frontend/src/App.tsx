@@ -1,37 +1,68 @@
-import React, { useState } from 'react'
-import DeckGL from '@deck.gl/react'
-import { ScatterplotLayer } from '@deck.gl/layers'
-import { Map } from 'maplibre-gl'
-import 'maplibre-gl/dist/maplibre-gl.css'
+import React, { useState, useEffect } from 'react';
+import DeckGL from '@deck.gl/react';
+import { ArcLayer } from '@deck.gl/layers';
+import Map from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
-const initialData = [
-    { position: [2.3522, 48.8566], size: 100 },
-    { position: [2.3499, 48.8530], size: 100 },
-    { position: [2.3333, 48.8600], size: 100 }
-]
+// Define the type for a single point
+interface Point {
+  lon: number;
+  lat: number;
+}
+
+// Define the type for arc data
+interface ArcData {
+  sourcePosition: [number, number];
+  targetPosition: [number, number];
+}
+
+const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 export default function App() {
-    const [enabled, setEnabled] = useState(true)
+  const [arcData, setArcData] = useState<ArcData[]>([]);
 
-    const layers = enabled ? [
-        new ScatterplotLayer({
-            id: 'scatterplot-layer',
-            data: initialData,
-            getPosition: (d: any) => d.position,
-            getRadius: (d: any) => d.size,
-            getFillColor: () => [255, 140, 0],
-            radiusScale: 1,
-            radiusMinPixels: 1,
-            pickable: true
-        })
-    ] : []
+  useEffect(() => {
+    fetch('http://localhost:8000/api/random-arc-in-paris')
+      .then(response => response.json())
+      .then((points: Point[]) => {
+        const arcs = [];
+        for (let i = 0; i < points.length - 1; i++) {
+          arcs.push({
+            sourcePosition: [points[i].lon, points[i].lat],
+            targetPosition: [points[i + 1].lon, points[i + 1].lat],
+          });
+        }
+        setArcData(arcs);
+      });
+  }, []);
 
-    return (
-        <div style={{ height: '100vh' }}>
-            <button onClick={() => setEnabled(!enabled)} style={{ position: 'absolute', zIndex: 1, margin: 12 }}>{enabled ? 'Disable' : 'Enable'}</button>
-            <DeckGL initialViewState={{ longitude: 2.3522, latitude: 48.8566, zoom: 12 }} controller={true} layers={layers}>
-                {/* Map rendering handled by deck.gl via maplibre */}
-            </DeckGL>
-        </div>
-    )
+  const layers = [
+    new ArcLayer<ArcData>({
+      id: 'arc-layer',
+      data: arcData,
+      getSourcePosition: d => d.sourcePosition,
+      getTargetPosition: d => d.targetPosition,
+      getSourceColor: () => [0, 255, 0],
+      getTargetColor: () => [0, 255, 0],
+      getWidth: 2,
+    }),
+  ];
+
+  return (
+    <DeckGL
+      initialViewState={{
+        longitude: 2.3522,
+        latitude: 48.8566,
+        zoom: 11,
+        pitch: 45,
+      }}
+      controller={true}
+      layers={layers}
+    >
+      <Map
+        mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
+        mapStyle="mapbox://styles/mapbox/dark-v11"
+      />
+    </DeckGL>
+  );
 }
