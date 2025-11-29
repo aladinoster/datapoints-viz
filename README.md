@@ -1,47 +1,65 @@
-# Visualizing DataPoints via Deck.gl
+# Datapoints Visualization
 
-Sample project to visualize datapoints via FastAPI and Deck.gl
+This is a sample project to visualize datapoints on a map using Deck.gl for the frontend and FastAPI for the backend.
 
-## Install dependencies
+## Project Structure
 
-**Requirements**: Node (22.12+), Python(3.13+)
+-   `frontend/`: Contains the React frontend application. See `frontend/README.md` for more details.
+-   `backend/`: Contains the Python backend API. See `backend/README.md` for more details.
 
-To run this project install [bun](https://bun.sh)
+## Getting Started
 
-```shell
-npm install -g bun
-```
+Follow these steps to get the project up and running on your local machine.
 
-To run the backend install `uv`
+### Prerequisites
 
-```shell
-python -m pip install uv 
-```
+-   **Node.js:** v20.19+ or v22.12+
+-   **Bun:** A fast JavaScript all-in-one toolkit. [Installation guide](https://bun.sh/docs/installation).
+-   **Python:** 3.10+
+-   **uv:** A fast Python package installer. [Installation guide](https://github.com/astral-sh/uv).
 
-## Install the project
+### Installation
 
-Frontend
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/aladinoster/datapoints-viz.git
+    cd datapoints-viz
+    ```
 
-```shell
-bun install
-```
+2.  **Install backend dependencies:**
+    Navigate to the `backend` directory and use `uv` to install the packages.
+    ```bash
+    cd backend
+    uv sync
+    cd ..
+    ```
 
-Backend
+3.  **Install frontend dependencies:**
+    Navigate to the `frontend` directory and use `bun` to install the packages.
+    ```bash
+    cd frontend
+    bun install
+    cd ..
+    ```
 
-```shell
-uv sync
-```
+### Running the Application
 
-## Run the project
+You will need two terminals to run both the backend and frontend servers.
 
-Run the backend
+1.  **Run the backend server:**
+    In your first terminal, navigate to the `backend` directory and run the following command:
+    ```bash
+    cd backend
+    uv run uvicorn app.main:app --reload --port 8000
+    ```
+    The backend API will be running at `http://localhost:8000`.
 
-```shell
-uv run uvicorn app.main:app --reload --port 8000
-```
+2.  **Run the frontend server:**
+    Before starting the frontend, you need to set up your Mapbox access token. See the `frontend/README.md` for detailed instructions.
 
-Run the front end
-
-```shell
-bun run dev 
-```
+    In your second terminal, navigate to the `frontend` directory and run the following command:
+    ```bash
+    cd frontend
+    bun dev
+    ```
+    The frontend application will be available at `http://localhost:5173`.
